@@ -1,0 +1,41 @@
+
+.attendance-container {
+    padding: 20px;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: #1e88e5;
+  }
+  
+  .date-section {
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+  }
+  
+  thead th {
+    background-color: #1e88e5;
+    color: white;
+    padding: 10px;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #ffcdd2;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #bbdefb;
+  }
+  
+  td, th {
+    padding: 10px;
+    text-align: center;
+  }
