@@ -69,7 +69,7 @@ const DefaultersPage = () => {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #231367ff 0%, #231367ff 100%)',
       padding: '2rem',
       fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
     }}>
@@ -292,7 +292,7 @@ const DefaultersPage = () => {
               }}>
                 <thead>
                   <tr style={{
-                    background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                    background: 'linear-gradient(45deg, #000000ff,  #000000ff)',
                     color: 'white'
                   }}>
                     <th style={{
