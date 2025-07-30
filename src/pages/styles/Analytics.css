@@ -1,0 +1,47 @@
+.dashboard-container {
+  padding: 2rem;
+  background-color: #f8fafc;
+  font-family: sans-serif;
+}
+
+.stats-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  flex: 1;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.chart-card {
+  background: white;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.chart-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.data-table.critical tr {
+  background-color: #ffe5e5;
+}

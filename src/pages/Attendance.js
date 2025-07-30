@@ -368,6 +368,7 @@ const Attendance = () => {
         )}
 
         {/* Action Buttons */}
+
         <div style={{
           display: 'flex',
           gap: '1rem',
@@ -435,6 +436,104 @@ const Attendance = () => {
              Defaulters List
           </button>
         </div>
+
+        {/* Action Buttons */}
+<div style={{
+  display: 'flex',
+  gap: '1rem',
+  justifyContent: 'center',
+  flexWrap: 'wrap'
+}}>
+  <button
+    onClick={handleAttendanceSubmit}
+    disabled={!date || students.length === 0}
+    style={{
+      background: (!date || students.length === 0) 
+        ? '#6c757d' 
+        : 'linear-gradient(45deg, #667eea, #764ba2)',
+      color: 'white',
+      border: 'none',
+      padding: '15px 30px',
+      borderRadius: '25px',
+      fontSize: '1.1rem',
+      fontWeight: '600',
+      cursor: (!date || students.length === 0) ? 'not-allowed' : 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+      minWidth: '200px'
+    }}
+    onMouseOver={(e) => {
+      if (date && students.length > 0) {
+        e.target.style.transform = 'translateY(-2px)';
+        e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+      }
+    }}
+    onMouseOut={(e) => {
+      if (date && students.length > 0) {
+        e.target.style.transform = 'translateY(0)';
+        e.target.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+      }
+    }}
+  >
+    💾 Submit Attendance
+  </button>
+
+  <button
+    onClick={goToDefaulterPage}
+    style={{
+      background: 'linear-gradient(45deg, #ff6b6b, #ee5a24)',
+      color: 'white',
+      border: 'none',
+      padding: '15px 30px',
+      borderRadius: '25px',
+      fontSize: '1.1rem',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 4px 15px rgba(255, 107, 107, 0.3)',
+      minWidth: '200px'
+    }}
+    onMouseOver={(e) => {
+      e.target.style.transform = 'translateY(-2px)';
+      e.target.style.boxShadow = '0 6px 20px rgba(255, 107, 107, 0.4)';
+    }}
+    onMouseOut={(e) => {
+      e.target.style.transform = 'translateY(0)';
+      e.target.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
+    }}
+  >
+    📊 Defaulters List
+  </button>
+
+  <button
+    onClick={() => navigate(`/analytics/${subjectCode}`)}
+    style={{
+      background: 'linear-gradient(45deg, #00b09b, #96c93d)',
+      color: 'white',
+      border: 'none',
+      padding: '15px 30px',
+      borderRadius: '25px',
+      fontSize: '1.1rem',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 4px 15px rgba(0, 176, 155, 0.3)',
+      minWidth: '200px'
+    }}
+    onMouseOver={(e) => {
+      e.target.style.transform = 'translateY(-2px)';
+      e.target.style.boxShadow = '0 6px 20px rgba(0, 176, 155, 0.4)';
+    }}
+    onMouseOut={(e) => {
+      e.target.style.transform = 'translateY(0)';
+      e.target.style.boxShadow = '0 4px 15px rgba(0, 176, 155, 0.3)';
+    }}
+  >
+    📈 Analytics Dashboard
+  </button>
+</div>
+
+
       </div>
     </div>
   );

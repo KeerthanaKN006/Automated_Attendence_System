@@ -3,23 +3,23 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mysql = require('mysql');
 const attendanceRoutes = require('./routes/attendanceRoutes');
+const analyticsRoutesFactory = require('./routes/analyticsRoutes');
 
 const app = express();
 const PORT = 4000;
 
-// Middleware setup
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// MySQL connection setup
+// MySQL connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'NairK@123',
+  password: 'root',
   database: 'attendance_system',
 });
 
-// Connect to MySQL
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to database:', err);
@@ -32,10 +32,10 @@ db.connect((err) => {
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-
+  
   db.query(query, [username, password], (err, results) => {
     if (err) {
-      console.error('Error executing query:', err);
+      console.error('Login error:', err);
       return res.status(500).json({ success: false, message: 'Something went wrong.' });
     }
     if (results.length > 0) {
@@ -46,7 +46,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Get attendance for a subject and specific date
+// Get attendance for a subject on a specific date
 app.get('/attendance/:subjectCode/:date', (req, res) => {
   const { subjectCode, date } = req.params;
   const query = `
@@ -57,7 +57,7 @@ app.get('/attendance/:subjectCode/:date', (req, res) => {
     LEFT JOIN attendance_records ar ON ar.student_id = s.id AND ar.subject_code = ss.subject_code AND ar.date = ?
     WHERE ss.subject_code = ?
   `;
-
+  
   db.query(query, [date, subjectCode], (err, results) => {
     if (err) {
       console.error('Error fetching attendance data:', err);
@@ -67,10 +67,13 @@ app.get('/attendance/:subjectCode/:date', (req, res) => {
   });
 });
 
-// Submit attendance data
+// Submit attendance for a subject on a specific date
 app.post('/attendance/:subjectCode/:date', (req, res) => {
   const { subjectCode, date } = req.params;
   const { students } = req.body;
+
+  let completed = 0;
+  let hasError = false;
 
   students.forEach(student => {
     const { id, attendance } = student;
@@ -78,19 +81,28 @@ app.post('/attendance/:subjectCode/:date', (req, res) => {
     const checkQuery = `
       SELECT * FROM attendance_records WHERE student_id = ? AND subject_code = ? AND date = ?
     `;
-
+    
     db.query(checkQuery, [id, subjectCode, date], (err, results) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Error checking attendance record' });
+      if (err || hasError) {
+        if (!hasError) {
+          hasError = true;
+          return res.status(500).json({ success: false, message: 'Error checking attendance record' });
+        }
+        return;
       }
 
       if (results.length > 0) {
-        const updateQuery = `
-          UPDATE attendance_records SET attendance = ? WHERE id = ?
-        `;
+        const updateQuery = `UPDATE attendance_records SET attendance = ? WHERE id = ?`;
         db.query(updateQuery, [attendance, results[0].id], (err) => {
-          if (err) {
-            return res.status(500).json({ success: false, message: 'Error updating attendance' });
+          if (err || hasError) {
+            if (!hasError) {
+              hasError = true;
+              return res.status(500).json({ success: false, message: 'Error updating attendance' });
+            }
+            return;
+          }
+          if (++completed === students.length && !hasError) {
+            return res.status(200).json({ success: true, message: 'Attendance updated successfully' });
           }
         });
       } else {
@@ -99,19 +111,21 @@ app.post('/attendance/:subjectCode/:date', (req, res) => {
           VALUES (?, ?, ?, ?)
         `;
         db.query(insertQuery, [id, subjectCode, attendance, date], (err) => {
-          if (err) {
-            return res.status(500).json({ success: false, message: 'Error inserting attendance' });
+          if (err || hasError) {
+            if (!hasError) {
+              hasError = true;
+              return res.status(500).json({ success: false, message: 'Error inserting attendance' });
+            }
+            return;
+          }
+          if (++completed === students.length && !hasError) {
+            return res.status(200).json({ success: true, message: 'Attendance updated successfully' });
           }
         });
       }
     });
   });
-
-  res.status(200).json({ success: true, message: 'Attendance updated successfully' });
 });
-
-// External attendance routes
-app.use('/api', attendanceRoutes);
 
 // ✅ Defaulters route - Fixed to use attendance field (0/1)
 app.get('/defaulters/:subjectCode/:month/:year', (req, res) => {
@@ -174,6 +188,13 @@ app.get('/defaulters/:subjectCode/:month/:year', (req, res) => {
     });
   });
 });
+
+// External routes
+app.use('/api', attendanceRoutes);
+
+// 🟢 Analytics Routes: Inject db into the route module
+const analyticsRoutes = analyticsRoutesFactory(db);
+app.use('/api/analytics', analyticsRoutes);
 
 // Start server
 app.listen(PORT, () => {
