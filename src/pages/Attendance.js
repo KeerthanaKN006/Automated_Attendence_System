@@ -201,7 +201,7 @@ const Attendance = () => {
           )}
         </div>
 
-        {/* Students Table */}
+        {}
         {students.length > 0 ? (
           <div style={{
             background: 'white',
@@ -405,7 +405,7 @@ const Attendance = () => {
               }
             }}
           >
-            💾 Submit Attendance
+           Submit Attendance
           </button>
 
           <button
@@ -432,7 +432,7 @@ const Attendance = () => {
               e.target.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
             }}
           >
-            📊 Defaulters List
+             Defaulters List
           </button>
         </div>
       </div>
