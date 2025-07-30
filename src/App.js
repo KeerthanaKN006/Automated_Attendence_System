@@ -1,11 +1,10 @@
-// App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import DivisionCat from './pages/DivisionCat';
 import Attendance from './pages/Attendance';
-import DefaultersPage from './pages/DefaultersPage';  // Import DefaulterPage component
-import './App.css';
+import DefaultersPage from './pages/DefaultersPage'
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
 
 function App() {
   return (
@@ -14,8 +13,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/division" element={<DivisionCat />} />
         <Route path="/attendance/:subjectCode" element={<Attendance />} />
-        
-        {/* Add a route for the DefaulterPage */}
+        <Route path="/analytics/:subjectCode" element={<AnalyticsDashboard />} />
         <Route path="/defaulters" element={<DefaultersPage />} />
       </Routes>
     </Router>
